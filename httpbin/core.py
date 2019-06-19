@@ -53,7 +53,7 @@ from .utils import weighted_choice
 from .structures import CaseInsensitiveDict
 
 with open(
-    os.path.join(os.path.realpath(os.path.dirname(__file__)), "VERSION")
+        os.path.join(os.path.realpath(os.path.dirname(__file__)), "VERSION")
 ) as version_file:
     version = version_file.read().strip()
 
@@ -235,6 +235,22 @@ def set_cors_headers(response):
 # ------
 # Routes
 # ------
+
+failedMax = 0
+failedCount = 0
+
+
+@app.route("/fail-request/<int:count>/<int:code>")
+def fail_n_requests(count, code):
+    global failedMax
+    global failedCount
+    if count != failedMax:
+        failedCount = 0
+        failedMax = count
+    failedCount += 1
+    if failedCount > failedMax:
+        return status_code(200)
+    return status_code(code)
 
 
 @app.route("/legacy")
@@ -1090,7 +1106,7 @@ def digest_auth_nostale(qop=None, user="user", passwd="passwd", algorithm="MD5")
 
 @app.route("/digest-auth/<qop>/<user>/<passwd>/<algorithm>/<stale_after>")
 def digest_auth(
-    qop=None, user="user", passwd="passwd", algorithm="MD5", stale_after="never"
+        qop=None, user="user", passwd="passwd", algorithm="MD5", stale_after="never"
 ):
     """Prompts the user for authorization using Digest Auth + Algorithm.
     allow settings the stale_after argument.
@@ -1142,10 +1158,10 @@ def digest_auth(
         credentials = parse_authorization_header(authorization)
 
     if (
-        not authorization
-        or not credentials
-        or credentials.type.lower() != "digest"
-        or (require_cookie_handling and "Cookie" not in request.headers)
+            not authorization
+            or not credentials
+            or credentials.type.lower() != "digest"
+            or (require_cookie_handling and "Cookie" not in request.headers)
     ):
         response = digest_challenge_response(app, qop, algorithm)
         response.set_cookie("stale_after", value=stale_after)
@@ -1165,9 +1181,9 @@ def digest_auth(
         stale_after_value = request.cookies.get("stale_after")
 
     if (
-        "last_nonce" in request.cookies
-        and current_nonce == request.cookies.get("last_nonce")
-        or stale_after_value == "0"
+            "last_nonce" in request.cookies
+            and current_nonce == request.cookies.get("last_nonce")
+            or stale_after_value == "0"
     ):
         response = digest_challenge_response(app, qop, algorithm, True)
         response.set_cookie("stale_after", value=stale_after)
@@ -1533,9 +1549,9 @@ def range_request(numbytes):
     range_length = (last_byte_pos + 1) - first_byte_pos
 
     if (
-        first_byte_pos > last_byte_pos
-        or first_byte_pos not in xrange(0, numbytes)
-        or last_byte_pos not in xrange(0, numbytes)
+            first_byte_pos > last_byte_pos
+            or first_byte_pos not in xrange(0, numbytes)
+            or last_byte_pos not in xrange(0, numbytes)
     ):
         response = Response(
             headers={
@@ -1726,7 +1742,7 @@ def image_svg():
 def resource(filename):
     path = os.path.join(tmpl_dir, filename)
     with open(path, "rb") as f:
-      return f.read()
+        return f.read()
 
 
 @app.route("/xml")
