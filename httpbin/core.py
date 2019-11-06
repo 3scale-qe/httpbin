@@ -392,7 +392,7 @@ def view_get():
         description: The request's query parameters.
     """
 
-    return jsonify(get_dict("url", "args", "headers", "origin"))
+    return jsonify(get_dict("url", "args", "headers", "origin", "path"))
 
 
 @app.route("/anything", methods=["GET", "POST", "PUT", "DELETE", "PATCH", "TRACE"])
@@ -423,6 +423,7 @@ def view_anything(anything=None):
             "data",
             "files",
             "json",
+            "path"
         )
     )
 

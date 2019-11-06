@@ -171,7 +171,7 @@ def get_url(request):
 def get_dict(*keys, **extras):
     """Returns request dict of given keys."""
 
-    _keys = ('url', 'args', 'form', 'data', 'origin', 'headers', 'files', 'json', 'method')
+    _keys = ('url', 'args', 'form', 'data', 'origin', 'headers', 'files', 'json', 'method', 'path')
 
     assert all(map(_keys.__contains__, keys))
     data = request.data
@@ -192,6 +192,7 @@ def get_dict(*keys, **extras):
         files=get_files(),
         json=_json,
         method=request.method,
+        path=request.path
     )
 
     out_d = dict()
