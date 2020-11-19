@@ -139,6 +139,7 @@ template = {
             "name": "Anything",
             "description": "Returns anything that is passed to request",
         },
+        {"name": "Nothing", "description": "Returns (almost) nothing"}
     ],
 }
 
@@ -423,6 +424,35 @@ def view_anything(anything=None):
             "data",
             "files",
             "json",
+            "path"
+        )
+    )
+
+
+@app.route("/nothing", methods=["GET", "POST", "PUT", "DELETE", "PATCH", "TRACE"])
+@app.route(
+    "/nothing/<path:nothing>",
+    methods=["GET", "POST", "PUT", "DELETE", "PATCH", "TRACE"],
+)
+def view_nothing(nothing=None):
+    """Returns (almost) nothing passed in request data.
+    ---
+    tags:
+      - Nothing
+    produces:
+      - application/json
+    responses:
+      200:
+        description: (Almost) nothing passed in request
+    """
+
+    return jsonify(
+        get_dict(
+            "url",
+            "args",
+            "headers",
+            "origin",
+            "method",
             "path"
         )
     )
