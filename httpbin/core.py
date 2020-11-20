@@ -1265,6 +1265,32 @@ def delay_response(delay, anything=None):
     )
 
 
+@app.route("/sleep/<sleep>", methods=["GET", "POST", "PUT", "DELETE", "PATCH", "TRACE"])
+@app.route("/sleep/<sleep>/<path:anything>", methods=["GET", "POST", "PUT", "DELETE", "PATCH", "TRACE"])
+def sleep_response(sleep, anything=None):
+    """Returns a delayed response (max of 120 seconds).
+    ---
+    tags:
+      - Dynamic data
+    parameters:
+      - in: path
+        name: sleep
+        type: int
+    produces:
+      - application/json
+    responses:
+      200:
+        description: A delayed response.
+    """
+    sleep = min(float(sleep), 120)
+
+    time.sleep(sleep)
+
+    return jsonify(
+        get_dict("url", "args", "form", "data", "origin", "headers", "files")
+    )
+
+
 @app.route("/drip")
 def drip():
     """Drips data over a duration after an optional initial delay.
