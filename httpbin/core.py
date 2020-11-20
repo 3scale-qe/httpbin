@@ -1240,7 +1240,8 @@ def digest_auth(
 
 
 @app.route("/delay/<delay>", methods=["GET", "POST", "PUT", "DELETE", "PATCH", "TRACE"])
-def delay_response(delay):
+@app.route("/delay/<delay>/<path:anything>", methods=["GET", "POST", "PUT", "DELETE", "PATCH", "TRACE"])
+def delay_response(delay, anything=None):
     """Returns a delayed response (max of 10 seconds).
     ---
     tags:
